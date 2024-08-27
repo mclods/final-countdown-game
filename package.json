@@ -30,6 +30,6 @@
     "vite": "^5.4.1"
   },
   "lint-staged": {
-    "*.{js, jsx, ts, tsx, css, html}": "prettier --write --ignore-unknown"
+    "**/*.{js,jsx,ts,tsx,css,html,md}": "prettier --write --ignore-unknown"
   }
 }
