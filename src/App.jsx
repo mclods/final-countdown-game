@@ -1,7 +1,13 @@
 import './App.css';
+import Player from './components/Player';
 
 function App() {
-  return <h1>Final Countdown Game</h1>;
+  return (
+    <>
+      <Player />
+      <div id="challenges"></div>
+    </>
+  );
 }
 
 export default App;
