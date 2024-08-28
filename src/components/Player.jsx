@@ -49,7 +49,7 @@ const Section = styled.section`
 
 function Player() {
   return (
-    <Section id="player">
+    <Section>
       <h2>Welcome unknown entity</h2>
       <p>
         <input type="text" />
