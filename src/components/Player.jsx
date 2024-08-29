@@ -17,10 +17,11 @@ const Section = styled.section`
   & input {
     font: inherit;
     border: 1px solid #54a399;
-    background-color: #192f2b;
+    background-color: ${({ $error }) => ($error ? '#2e1818' : '#192f2b')};
     border-radius: 4px;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
+    border-right-style: none;
     padding: 0.27rem;
     color: #d1f0ec;
   }
@@ -36,11 +37,10 @@ const Section = styled.section`
     border: 1px solid #54a399;
     padding: 0.4rem 1rem;
     color: #061e1a;
-    border-top-right-radius: 4px;
-    border-bottom-right-radius: 4px;
     border-radius: 4px;
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
+    border-left-style: none;
   }
 
   & button:hover {
@@ -50,22 +50,34 @@ const Section = styled.section`
 
   & button:active {
     background-color: #337168;
+    border-color: #337168;
   }
 `;
 
 function Player() {
   const playerRef = useRef();
   const [playerName, setPlayerName] = useState('');
+  const [error, setError] = useState(false);
 
   function handleClick() {
     if (playerRef.current.value) {
-      setPlayerName(playerRef.current.value);
-      playerRef.current.value = '';
+      if (validateName(playerRef.current.value)) {
+        setPlayerName(playerRef.current.value);
+        setError(false);
+        playerRef.current.value = '';
+      } else {
+        setError(true);
+      }
     }
   }
 
+  function validateName(name) {
+    const regex = /^[A-Za-z]( ?[A-Za-z])*$/g;
+    return regex.test(name);
+  }
+
   return (
-    <Section>
+    <Section $error={error}>
       <h2>Welcome {playerName ? playerName : 'unknown entity'}</h2>
       <p>
         <input ref={playerRef} type="text" />
