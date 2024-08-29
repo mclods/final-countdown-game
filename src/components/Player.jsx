@@ -1,3 +1,4 @@
+import { useRef, useState } from 'react';
 import styled from 'styled-components';
 
 const Section = styled.section`
@@ -29,6 +30,7 @@ const Section = styled.section`
   }
 
   & button {
+    font-weight: bold;
     cursor: pointer;
     background-color: #54a399;
     border: 1px solid #54a399;
@@ -45,15 +47,29 @@ const Section = styled.section`
     background-color: #3c8379;
     border-color: #3c8379;
   }
+
+  & button:active {
+    background-color: #337168;
+  }
 `;
 
 function Player() {
+  const playerRef = useRef();
+  const [playerName, setPlayerName] = useState('');
+
+  function handleClick() {
+    if (playerRef.current.value) {
+      setPlayerName(playerRef.current.value);
+      playerRef.current.value = '';
+    }
+  }
+
   return (
     <Section>
-      <h2>Welcome unknown entity</h2>
+      <h2>Welcome {playerName ? playerName : 'unknown entity'}</h2>
       <p>
-        <input type="text" />
-        <button>Set Name</button>
+        <input ref={playerRef} type="text" />
+        <button onClick={handleClick}>Set Name</button>
       </p>
     </Section>
   );
