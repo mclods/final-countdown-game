@@ -60,12 +60,14 @@ function Player() {
   const [error, setError] = useState(false);
 
   function handleClick() {
-    if (playerRef.current.value && validateName(playerRef.current.value)) {
-      setPlayerName(playerRef.current.value);
-      setError(false);
-      playerRef.current.value = '';
-    } else {
-      setError(true);
+    if (playerRef.current.value) {
+      if (validateName(playerRef.current.value)) {
+        setPlayerName(playerRef.current.value);
+        setError(false);
+        playerRef.current.value = '';
+      } else {
+        setError(true);
+      }
     }
   }
 
