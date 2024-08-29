@@ -70,7 +70,7 @@ function Player() {
   }
 
   function validateName(name) {
-    const regex = /^[a-zA-Z0-9 ]*$/;
+    const regex = /^[A-Za-z]( ?[A-Za-z])*$/g;
     return regex.test(name);
   }
 
