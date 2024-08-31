@@ -11,7 +11,6 @@ jobs:
     steps:
       - id: label-the-pr
         uses: actions/labeler@v5
-        run: echo "Labeling the PR"
       
       - id: output-the-label
         run: echo "Branch ${{ github.ref }} was labelled as ${{ steps.label-the-PR.outputs.all-labels }}"
