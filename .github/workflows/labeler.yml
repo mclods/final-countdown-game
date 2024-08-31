@@ -1,6 +1,6 @@
-name: "Pull Request Labeler"
+name: 'Pull Request Labeler'
 on:
-- pull_request_target
+  - pull_request_target
 
 jobs:
   labeler:
@@ -9,8 +9,10 @@ jobs:
       pull-requests: write
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
+      - run: echo "The ${{ github.repository }} repository has been cloned to the runner."
       - id: label-the-pr
         uses: actions/labeler@v5
-      
-      - id: output-the-label
-        run: echo "Branch ${{ github.ref }} was labelled as ${{ steps.label-the-PR.outputs.all-labels }}"
+        with:
+          configuration-path: '.github/labeler.yml'
+      - run: echo "The branch ${{ github.head_ref || github.ref_name }} was labeled as ${{ steps.label-the-PR.outputs.all-labels }}."
