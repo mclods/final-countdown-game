@@ -4,6 +4,9 @@ feature:
 bugfix:
   - head-branch: '^bugfix/'
 
+hotfix:
+  - head-branch: '^hotfix/'
+
 test:
   - head-branch: '^test/'
 
