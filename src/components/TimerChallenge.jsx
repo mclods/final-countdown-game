@@ -1,5 +1,6 @@
 import { useRef, useState } from 'react';
 import styled, { keyframes, css } from 'styled-components';
+import ResultModal from './ResultModal';
 
 const Challenge = styled.section`
   width: 22rem;
@@ -70,12 +71,14 @@ const TimerMessage = styled.p`
 
 function TimerChallenge({ title, targetTime }) {
   const timerRef = useRef();
+  const dialogRef = useRef();
   const [timerStarted, setTimerStarted] = useState(false);
   const [timerEnded, setTimerEnded] = useState(false);
 
   function handleStart() {
     timerRef.current = setTimeout(() => {
       setTimerEnded(true);
+      dialogRef.current.open();
     }, targetTime * 1000);
     setTimerStarted(true);
   }
@@ -91,21 +94,24 @@ function TimerChallenge({ title, targetTime }) {
   }
 
   return (
-    <Challenge>
-      <h2>{title}</h2>
-      <p>{timerEnded ? 'You Lost' : ''}</p>
-      <ChallengeTime>
-        {targetTime} second{targetTime > 1 ? 's' : ''}
-      </ChallengeTime>
-      <p>
-        <button onClick={timerStarted ? handleStop : handleStart}>
-          {timerStarted ? 'Stop' : 'Start'} Challenge
-        </button>
-      </p>
-      <TimerMessage $timerStarted={timerStarted}>
-        {timerStarted ? 'Time is running...' : 'Timer inactive'}
-      </TimerMessage>
-    </Challenge>
+    <>
+      <ResultModal ref={dialogRef} result="lost" targetTime={targetTime} />
+      <Challenge>
+        <h2>{title}</h2>
+        <p>{timerEnded ? 'You Lost' : ''}</p>
+        <ChallengeTime>
+          {targetTime} second{targetTime > 1 ? 's' : ''}
+        </ChallengeTime>
+        <p>
+          <button onClick={timerStarted ? handleStop : handleStart}>
+            {timerStarted ? 'Stop' : 'Start'} Challenge
+          </button>
+        </p>
+        <TimerMessage $timerStarted={timerStarted}>
+          {timerStarted ? 'Time is running...' : 'Timer inactive'}
+        </TimerMessage>
+      </Challenge>
+    </>
   );
 }
 
