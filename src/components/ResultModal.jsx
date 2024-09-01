@@ -1,4 +1,5 @@
 import { forwardRef, useImperativeHandle, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import styled, { css, keyframes } from 'styled-components';
 
 const slideIn = keyframes`
@@ -67,10 +68,16 @@ const Dialog = styled.dialog`
 `;
 
 const ResultModal = forwardRef(function ResultModal(
-  { result, targetTime },
+  { targetTime, timeRemainingInMS, onClose },
   ref
 ) {
   const dialogRef = useRef();
+  const targetTimeInMS = targetTime * 1000;
+  const userLost = timeRemainingInMS <= 0;
+  const formattedTimeRemainingInS = (timeRemainingInMS / 1000).toFixed(2);
+  const score = userLost
+    ? 0
+    : Math.round((1 - timeRemainingInMS / targetTimeInMS) * 100);
 
   useImperativeHandle(ref, function () {
     return {
@@ -80,20 +87,22 @@ const ResultModal = forwardRef(function ResultModal(
     };
   });
 
-  return (
-    <Dialog ref={dialogRef}>
-      <h2>You {result}</h2>
+  return createPortal(
+    <Dialog ref={dialogRef} onClose={onClose}>
+      <h2>{userLost ? 'You Lost' : `Your Score ${score}`}</h2>
       <p>
         The target time was <strong>{targetTime}</strong> second
         {targetTime > 1 ? 's' : ''}.
       </p>
       <p>
-        You stopped the timer with <strong>X seconds left.</strong>
+        You stopped the timer with{' '}
+        <strong>{formattedTimeRemainingInS} seconds left.</strong>
       </p>
       <form method="dialog">
         <button>Close</button>
       </form>
-    </Dialog>
+    </Dialog>,
+    document.getElementById('modal')
   );
 });
 

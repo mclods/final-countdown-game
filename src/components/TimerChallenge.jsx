@@ -14,6 +14,7 @@ const Challenge = styled.section`
   color: #221c18;
   box-shadow: 0 2px 8px rgba(35, 34, 34, 0.6);
   border-radius: 6px;
+  position: relative;
 
   & h2 {
     font-size: 1.5rem;
@@ -37,6 +38,20 @@ const Challenge = styled.section`
 
   & button:hover {
     background: #051715;
+  }
+
+  &::before {
+    content: '';
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 6px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    display: ${({ $disabled }) => ($disabled ? 'block' : 'none')};
   }
 }
 `;
@@ -65,50 +80,71 @@ const flashAnimation = css`
 `;
 
 const TimerMessage = styled.p`
-  ${({ $timerStarted }) => ($timerStarted ? flashAnimation : '')}
+  ${({ $timerActive }) => ($timerActive ? flashAnimation : '')}
   font-weight: bold
 `;
 
-function TimerChallenge({ title, targetTime }) {
+const INTERVAL_CHECK_TIME = 10;
+
+function TimerChallenge({ title, targetTime, gameActive, setGameActive }) {
   const timerRef = useRef();
   const dialogRef = useRef();
-  const [timerStarted, setTimerStarted] = useState(false);
-  const [timerEnded, setTimerEnded] = useState(false);
+  const targetTimeInMS = targetTime * 1000;
+  const [timeRemainingInMS, setTimeRemainingInMS] = useState(targetTimeInMS);
+
+  const timerActive =
+    timeRemainingInMS > 0 && timeRemainingInMS < targetTimeInMS;
+
+  if (timerActive) {
+    setGameActive && setGameActive(true);
+  }
+
+  if (timeRemainingInMS <= 0) {
+    handleStop();
+  }
 
   function handleStart() {
-    timerRef.current = setTimeout(() => {
-      setTimerEnded(true);
-      dialogRef.current.open();
-    }, targetTime * 1000);
-    setTimerStarted(true);
+    timerRef.current = setInterval(function () {
+      setTimeRemainingInMS(
+        (prevTimeRemaining) => prevTimeRemaining - INTERVAL_CHECK_TIME
+      );
+    }, INTERVAL_CHECK_TIME);
   }
 
   function handleStop() {
-    clearTimeout(timerRef.current);
-    resetState();
+    clearInterval(timerRef.current);
+    showResultModal();
   }
 
   function resetState() {
-    setTimerStarted(false);
-    setTimerEnded(false);
+    setTimeRemainingInMS(targetTimeInMS);
+    setGameActive && setGameActive(false);
+  }
+
+  function showResultModal() {
+    dialogRef.current.open();
   }
 
   return (
     <>
-      <ResultModal ref={dialogRef} result="lost" targetTime={targetTime} />
-      <Challenge>
+      <ResultModal
+        ref={dialogRef}
+        targetTime={targetTime}
+        timeRemainingInMS={timeRemainingInMS}
+        onClose={resetState}
+      />
+      <Challenge $disabled={!timerActive && gameActive}>
         <h2>{title}</h2>
-        <p>{timerEnded ? 'You Lost' : ''}</p>
         <ChallengeTime>
           {targetTime} second{targetTime > 1 ? 's' : ''}
         </ChallengeTime>
         <p>
-          <button onClick={timerStarted ? handleStop : handleStart}>
-            {timerStarted ? 'Stop' : 'Start'} Challenge
+          <button onClick={timerActive ? handleStop : handleStart}>
+            {timerActive ? 'Stop' : 'Start'} Challenge
           </button>
         </p>
-        <TimerMessage $timerStarted={timerStarted}>
-          {timerStarted ? 'Time is running...' : 'Timer inactive'}
+        <TimerMessage $timerActive={timerActive}>
+          {timerActive ? 'Time is running...' : 'Timer inactive'}
         </TimerMessage>
       </Challenge>
     </>
