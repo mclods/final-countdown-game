@@ -17,13 +17,21 @@ const Section = styled.section`
   & input {
     font: inherit;
     border: 1px solid #54a399;
-    background-color: ${({ $error }) => ($error ? '#2e1818' : '#192f2b')};
     border-radius: 4px;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
     border-right-style: none;
     padding: 0.27rem;
     color: #d1f0ec;
+    ${({ $error }) =>
+      $error
+        ? `
+      background-color: #2e1818;
+      border-color: red;
+    `
+        : `
+      background-color: #192f2b;
+    `}
   }
 
   & input:focus {
@@ -41,6 +49,12 @@ const Section = styled.section`
     border-top-left-radius: 0;
     border-bottom-left-radius: 0;
     border-left-style: none;
+  }
+
+  & button:focus {
+    outline: none;
+    background-color: #337168;
+    border-color: #337168;
   }
 
   & button:hover {

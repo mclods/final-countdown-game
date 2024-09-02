@@ -3,6 +3,7 @@ import Player from './components/Player';
 import styled from 'styled-components';
 import TimerChallenge from './components/TimerChallenge';
 import { useState } from 'react';
+import InstructionToast from './components/InstructionToast';
 
 const Challenges = styled.div`
   max-width: 50rem;
@@ -17,6 +18,7 @@ function App() {
 
   return (
     <>
+      <InstructionToast gameActive={gameActive} />
       <Player />
       <Challenges>
         <TimerChallenge
