@@ -18,7 +18,7 @@ function App() {
 
   return (
     <>
-      <InstructionToast />
+      <InstructionToast gameActive={gameActive} />
       <Player />
       <Challenges>
         <TimerChallenge
