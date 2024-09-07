@@ -57,7 +57,7 @@ function InstructionToast({ gameActive }) {
   }, [gameActive]);
 
   return createPortal(
-    <Aside $isVisible={showToast}>
+    <Aside $isVisible={showToast} data-testid="instruction-toast">
       <img src={infoIcon} alt="info icon" />
       <p>Select a level to start the game</p>
     </Aside>,

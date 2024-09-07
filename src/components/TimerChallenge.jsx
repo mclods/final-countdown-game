@@ -84,7 +84,7 @@ const TimerMessage = styled.p`
   font-weight: bold
 `;
 
-const INTERVAL_CHECK_TIME = 10;
+const INTERVAL_CHECK_TIME_MS = 100;
 
 function TimerChallenge({ title, targetTime, gameActive, setGameActive }) {
   const timerRef = useRef();
@@ -106,9 +106,9 @@ function TimerChallenge({ title, targetTime, gameActive, setGameActive }) {
   function handleStart() {
     timerRef.current = setInterval(function () {
       setTimeRemainingInMS(
-        (prevTimeRemaining) => prevTimeRemaining - INTERVAL_CHECK_TIME
+        (prevTimeRemaining) => prevTimeRemaining - INTERVAL_CHECK_TIME_MS
       );
-    }, INTERVAL_CHECK_TIME);
+    }, INTERVAL_CHECK_TIME_MS);
   }
 
   function handleStop() {
@@ -122,7 +122,7 @@ function TimerChallenge({ title, targetTime, gameActive, setGameActive }) {
   }
 
   function showResultModal() {
-    dialogRef.current.open();
+    dialogRef.current?.open();
   }
 
   return (
@@ -133,17 +133,20 @@ function TimerChallenge({ title, targetTime, gameActive, setGameActive }) {
         timeRemainingInMS={timeRemainingInMS}
         onClose={resetState}
       />
-      <Challenge $disabled={!timerActive && gameActive}>
-        <h2>{title}</h2>
-        <ChallengeTime>
+      <Challenge $disabled={!timerActive && gameActive} data-testid="challenge">
+        <h2 data-testid="challenge-title">{title}</h2>
+        <ChallengeTime data-testid="challenge-time">
           {targetTime} second{targetTime > 1 ? 's' : ''}
         </ChallengeTime>
         <p>
-          <button onClick={timerActive ? handleStop : handleStart}>
+          <button
+            onClick={timerActive ? handleStop : handleStart}
+            data-testid="challenge-button"
+          >
             {timerActive ? 'Stop' : 'Start'} Challenge
           </button>
         </p>
-        <TimerMessage $timerActive={timerActive}>
+        <TimerMessage $timerActive={timerActive} data-testid="challenge-status">
           {timerActive ? 'Time is running...' : 'Timer inactive'}
         </TimerMessage>
       </Challenge>
