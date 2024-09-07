@@ -88,18 +88,20 @@ const ResultModal = forwardRef(function ResultModal(
   });
 
   return createPortal(
-    <Dialog ref={dialogRef} onClose={onClose}>
-      <h2>{userLost ? 'You Lost' : `Your Score ${score}`}</h2>
-      <p>
+    <Dialog ref={dialogRef} onClose={onClose} data-testid="result-modal">
+      <h2 data-testid="result">
+        {userLost ? 'You Lost' : `Your Score ${score}`}
+      </h2>
+      <p data-testid="result-time">
         The target time was <strong>{targetTime}</strong> second
         {targetTime > 1 ? 's' : ''}.
       </p>
-      <p>
+      <p data-testid="result-time-left">
         You stopped the timer with{' '}
         <strong>{formattedTimeRemainingInS} seconds left.</strong>
       </p>
       <form method="dialog">
-        <button>Close</button>
+        <button data-testid="result-modal-close-button">Close</button>
       </form>
     </Dialog>,
     document.getElementById('modal')

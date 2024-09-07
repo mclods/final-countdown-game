@@ -91,11 +91,15 @@ function Player() {
   }
 
   return (
-    <Section $error={error}>
-      <h2>Welcome {playerName ? playerName : 'unknown entity'}</h2>
+    <Section $error={error} data-testid="player">
+      <h2 data-testid="player-name">
+        Welcome {playerName ? playerName : 'unknown entity'}
+      </h2>
       <p>
-        <input ref={playerRef} type="text" />
-        <button onClick={handleClick}>Set Name</button>
+        <input ref={playerRef} type="text" data-testid="player-name-input" />
+        <button onClick={handleClick} data-testid="set-player-name-button">
+          Set Name
+        </button>
       </p>
     </Section>
   );
