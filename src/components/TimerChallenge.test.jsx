@@ -66,7 +66,7 @@ describe('Test TimerChallenge Component', () => {
       'Start Challenge'
     );
     expect(queryByTestId('challenge-status')).toHaveTextContent(
-      'Timer inactive'
+      'Timer inactives'
     );
   });
 });
