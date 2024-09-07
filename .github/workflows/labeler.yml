@@ -14,5 +14,5 @@ jobs:
       - id: label-the-pr
         uses: actions/labeler@v5
         with:
-          configuration-path: '.github/labeler.yml'
+          configuration-path: '.github/labeler-settings.yml'
       - run: echo "The branch ${{ github.head_ref || github.ref_name }} was labeled as ${{ steps.label-the-PR.outputs.all-labels }}."
